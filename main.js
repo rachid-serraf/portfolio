@@ -110,38 +110,81 @@
   }
   renderS();
 
-  /* 3. Terminal: commands + themes */
+  /* 3. Terminal: auto-cycling commands with typing effect */
   const out = document.getElementById('cli-out');
+  const cliCard = document.getElementById('cli-card');
+  const cmdBox = document.getElementById('cli-cmds');
+  const cmdBtns = [...cmdBox.querySelectorAll('.cmd')];
   const themes = { emerald: ['text-emerald-400', 'border-emerald-500/50'], cyan: ['text-cyan-400', 'border-cyan-500/50'], amber: ['text-amber-400', 'border-amber-500/50'] };
-  let theme = 'emerald', cmd = 'whoami';
+  let theme = 'emerald', cmd = 'whoami', typeTok = 0;
   const data = {
     whoami: ['name: Rachid Serraf', 'role: Full Stack Developer', 'school: Zone01 Oujda', 'location: Morocco', 'motto: always learning'],
     work: ['company: HPS, Casablanca', 'team: Acquirer, Software Factory', 'type: 2-month internship'],
     learn: ['frontend: React, Angular, Next.js', 'backend: Java/Spring Boot, Go, Rust, Node', 'data: PostgreSQL, SQLite, Redis', 'ops: Docker, Git, Gitea']
   };
-  function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
-  function paintCli() {
-    const [c, b] = themes[theme];
-    out.innerHTML =
-      `<div class="flex items-center gap-2"><span class="${c} font-semibold">➜</span><span class="text-neutral-500">~</span><span class="text-neutral-500">$</span><span class="text-white font-medium">${cmd}</span></div>` +
-      `<div class="pl-4 border-l-2 ${b} bg-white/5 rounded-r px-2 py-1 space-y-1 text-neutral-300">${data[cmd].map(l => `<div>${esc(l)}</div>`).join('')}</div>`;
+  const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  function showCmd(name, animate) {
+    cmd = name; const tok = ++typeTok; const [c, b] = themes[theme];
+    cmdBtns.forEach(x => x.classList.toggle('active', x.dataset.cmd === name));
+    const prompt = `<div class="flex items-center gap-2"><span class="${c} font-semibold">➜</span><span class="text-neutral-500">~</span><span class="text-neutral-500">$</span><span class="text-white font-medium" id="cli-typed"></span><span class="caret"></span></div>`;
+    const body = `<div class="pl-4 border-l-2 ${b} bg-white/5 rounded-r px-2 py-1 space-y-1 text-neutral-300 rise">${data[name].map(l => `<div>${esc(l)}</div>`).join('')}</div>`;
+    out.innerHTML = prompt;
+    const typed = document.getElementById('cli-typed');
+    if (!animate || reduce) { typed.textContent = name; out.insertAdjacentHTML('beforeend', body); return; }
+    let i = 0;
+    (function step() {
+      if (tok !== typeTok) return;
+      typed.textContent = name.slice(0, ++i);
+      if (i < name.length) setTimeout(step, 60);
+      else setTimeout(() => { if (tok === typeTok) out.insertAdjacentHTML('beforeend', body); }, 180);
+    })();
   }
-  document.querySelectorAll('#cli-cmds button').forEach(b => b.addEventListener('click', () => {
-    cmd = b.dataset.cmd;
-    document.querySelectorAll('#cli-cmds button').forEach(x => { x.classList.toggle('bg-neutral-800', x === b); x.classList.toggle('text-white', x === b); });
-    paintCli();
-  }));
-  const sw2 = document.querySelectorAll('#cli-theme-swatches button');
-  sw2.forEach(b => b.addEventListener('click', () => {
-    theme = b.dataset.theme; sw2.forEach(x => x.classList.toggle('ring-2', x === b)); sw2.forEach(x => x.classList.toggle('ring-white', x === b));
-    paintCli();
-  }));
-  paintCli();
 
-  /* 4. Workbench tabs */
-  const tabs = document.querySelectorAll('.tab-btn');
-  tabs.forEach(b => b.addEventListener('click', () => {
-    tabs.forEach(x => x.classList.toggle('active', x === b));
-    document.querySelectorAll('.panel').forEach(p => p.hidden = p.id !== 'tab-' + b.dataset.tab);
+  /* Auto-advance: the progress bar under the active button ends, then the next one opens.
+     Hover/focus/off-screen pauses it. A click by the visitor stops autoplay for that group. */
+  function autoGroup(box, btns, key, onSelect) {
+    const stop = () => btns.forEach(b => b.classList.remove('auto'));
+    btns.forEach(b => b.addEventListener('click', () => { stop(); onSelect(b.dataset[key], true); }));
+    box.addEventListener('animationend', e => {
+      if (e.animationName !== 'fill') return;
+      const i = btns.findIndex(b => b.classList.contains('active'));
+      const nb = btns[(i + 1) % btns.length];
+      onSelect(nb.dataset[key], true);
+      nb.classList.add('auto');
+    });
+  }
+  autoGroup(cmdBox, cmdBtns, 'cmd', (n, a) => showCmd(n, a));
+
+  document.querySelectorAll('#cli-theme-swatches button').forEach((b, _, all) => b.addEventListener('click', () => {
+    theme = b.dataset.theme;
+    all.forEach(x => { x.classList.toggle('ring-2', x === b); x.classList.toggle('ring-white', x === b); });
+    showCmd(cmd, false);
   }));
+  showCmd('whoami', false);
+
+  /* 4. Workbench tabs, auto-cycling */
+  const workCard = document.getElementById('work');
+  const tabBar = document.getElementById('tab-bar');
+  const tabs = [...tabBar.querySelectorAll('.tab-btn')];
+  function showTab(name) {
+    tabs.forEach(x => x.classList.toggle('active', x.dataset.tab === name));
+    document.querySelectorAll('.panel').forEach(p => { p.hidden = p.id !== 'tab-' + name; if (!p.hidden && !reduce) { p.classList.remove('rise'); void p.offsetWidth; p.classList.add('rise'); } });
+  }
+  autoGroup(tabBar, tabs, 'tab', showTab);
+
+  /* Pause while hovered, focused, or off-screen; no autoplay if reduced motion */
+  if (reduce) {
+    document.querySelectorAll('.auto').forEach(b => b.classList.remove('auto'));
+  } else {
+    [cliCard, workCard].forEach(card => {
+      const s = { over: false, focus: false, vis: false };
+      const apply = () => card.classList.toggle('paused', s.over || s.focus || !s.vis);
+      card.addEventListener('pointerenter', () => { s.over = true; apply(); });
+      card.addEventListener('pointerleave', () => { s.over = false; apply(); });
+      card.addEventListener('focusin', () => { s.focus = true; apply(); });
+      card.addEventListener('focusout', () => { s.focus = false; apply(); });
+      new IntersectionObserver(e => { s.vis = e[0].isIntersecting; apply(); }, { threshold: .4 }).observe(card);
+      apply();
+    });
+  }
 })();

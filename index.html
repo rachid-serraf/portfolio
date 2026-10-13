@@ -18,11 +18,36 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#fff;color:#0a0b0e;ov
 .glow-stream-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 ::-webkit-scrollbar{width:8px}::-webkit-scrollbar-track{background:#f8fafc}::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}
 :focus-visible{outline:2px solid #1a73e8;outline-offset:2px}
-.tab-btn{color:#a3a3a3;padding-bottom:4px;border-bottom:2px solid transparent;font-weight:500}
-.tab-btn:hover{color:#404040}
+.tab-btn{position:relative;color:#a3a3a3;padding-bottom:4px;border-bottom:2px solid transparent;font-weight:500;cursor:pointer}
+.tab-btn:hover{color:#404040;border-color:#d4d4d4}
 .tab-btn.active{color:#171717;border-color:#000;font-weight:600}
+.cmd{position:relative;overflow:hidden;cursor:pointer;padding:2px 8px;border:1px solid #404040;border-radius:6px;color:#a3a3a3;transition:color .15s,border-color .15s,background .15s}
+.cmd:hover{color:#fff;border-color:#737373}
+.cmd.active{background:#262626;color:#fff;border-color:#525252}
+@keyframes fill{from{width:0}to{width:100%}}
+.auto.active::after{content:'';position:absolute;left:0;height:2px;width:0;background:#1a73e8;animation:fill var(--dur,5s) linear forwards}
+.tab-btn.auto.active::after{bottom:-2px}
+.cmd.auto.active::after{bottom:0;background:#60a5fa}
+.paused .auto.active::after{animation-play-state:paused}
+@keyframes blink{50%{opacity:0}}
+.caret{display:inline-block;width:6px;height:12px;margin-left:2px;background:#e5e5e5;vertical-align:-2px;animation:blink 1s steps(1) infinite}
+@keyframes rise{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.rise{animation:rise .3s ease-out}
 .panel[hidden]{display:none}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+:root{--speck:20,20,20;--blue:51,85,255}
+.stage{position:relative;display:grid;grid-template-columns:1fr 1fr;min-height:640px;border:1px solid #e5e5e5;border-radius:1.5rem;background:#fff;overflow:hidden}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.stage .col{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;padding:32px 24px}
+.stage .pill{font:500 11px 'JetBrains Mono',monospace;color:#525252;background:rgba(255,255,255,.9);border:1px solid #e5e5e5;border-radius:999px;padding:4px 10px}
+.stage h2{font-size:1.6rem;line-height:1.1;font-weight:800;letter-spacing:-.03em;max-width:230px;background:rgba(255,255,255,.75);border-radius:12px;padding:4px 6px}
+.stage h2 span{display:block;margin-top:8px;font-size:.8rem;line-height:1.45;font-weight:500;color:#525252;letter-spacing:0}
+.stage .btn{display:inline-flex;padding:12px 24px;border-radius:999px;background:#000;color:#fff;font-size:13px;font-weight:700;transition:background .2s}
+.stage .btn:hover{background:#262626}
+.stage .btn.alt{background:#fff;color:#171717;border:2px solid #171717}
+.stage .btn.alt:hover{background:#171717;color:#fff}
+@media (max-width:760px){.stage{grid-template-columns:1fr;min-height:0}.stage .col{min-height:480px}}
 </style>
 </head>
 <body class="relative min-h-screen selection:bg-neutral-900 selection:text-white">
@@ -69,7 +94,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#fff;color:#0a0b0e;ov
           <span class="w-2 h-2 rounded-full bg-emerald-500"></span><span id="gravity-status-label">Widen the mouse field</span>
         </button>
       </div>
-      <p class="text-xs text-neutral-400 font-mono">Oujda, Morocco</p>
+      <p class="text-xs text-neutral-400 font-mono">Morocco</p>
     </div>
   </section>
 
@@ -107,7 +132,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#fff;color:#0a0b0e;ov
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
 
       <!-- CLI card -->
-      <div class="rounded-3xl p-8 bg-neutral-50 border border-neutral-200/90 flex flex-col justify-between hover:shadow-xl transition-shadow duration-300">
+      <div id="cli-card" class="rounded-3xl p-8 bg-neutral-50 border border-neutral-200/90 flex flex-col justify-between hover:shadow-xl transition-shadow duration-300">
         <div>
           <div class="flex items-center gap-2.5 mb-6">
             <div class="w-9 h-9 rounded-xl bg-neutral-900 text-white flex items-center justify-center font-mono text-sm">$_</div>
@@ -116,10 +141,10 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#fff;color:#0a0b0e;ov
           <p class="text-sm text-neutral-600 leading-relaxed mb-6">Full-stack developer who likes computer science and building real-world solutions. I work well in teams and keep learning. Pick a command:</p>
           <div class="rounded-2xl bg-neutral-950 p-4 border border-neutral-800 font-mono text-xs mb-6">
             <div class="flex items-center justify-between pb-3 mb-3 border-b border-neutral-800 text-[11px] text-neutral-400">
-              <div class="flex gap-2" id="cli-cmds">
-                <button class="px-2 py-0.5 rounded bg-neutral-800 text-white" data-cmd="whoami">whoami</button>
-                <button class="px-2 py-0.5 rounded hover:bg-neutral-800" data-cmd="work">work</button>
-                <button class="px-2 py-0.5 rounded hover:bg-neutral-800" data-cmd="learn">learn</button>
+              <div class="flex gap-2" id="cli-cmds" style="--dur:5s">
+                <button class="cmd active auto" data-cmd="whoami">whoami</button>
+                <button class="cmd" data-cmd="work">work</button>
+                <button class="cmd" data-cmd="learn">learn</button>
               </div>
               <div class="flex items-center gap-1.5" id="cli-theme-swatches">
                 <button class="w-3.5 h-3.5 rounded-full bg-emerald-400 ring-2 ring-white" data-theme="emerald" aria-label="Green theme"></button>
@@ -141,8 +166,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#fff;color:#0a0b0e;ov
             <div><h4 class="text-xl font-bold text-neutral-900 tracking-tight">Workbench</h4><p class="text-xs text-neutral-500 font-mono">Projects, stack and server</p></div>
           </div>
           <div class="rounded-2xl bg-white p-4 border border-neutral-200/90 shadow-sm text-xs mb-6">
-            <div class="flex items-center gap-4 pb-3 mb-3 border-b border-neutral-100 text-[12px]" role="tablist">
-              <button class="tab-btn active" data-tab="projects" role="tab">Projects.md</button>
+            <div class="flex items-center gap-4 pb-3 mb-3 border-b border-neutral-100 text-[12px]" role="tablist" id="tab-bar" style="--dur:6s">
+              <button class="tab-btn active auto" data-tab="projects" role="tab">Projects.md</button>
               <button class="tab-btn" data-tab="stack" role="tab">Stack.json</button>
               <button class="tab-btn" data-tab="server" role="tab">Server.yml</button>
             </div>
@@ -208,26 +233,19 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#fff;color:#0a0b0e;ov
     </div>
   </section>
 
-  <!-- Contact -->
-  <section class="max-w-6xl mx-auto px-6 pb-24" id="contact">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div class="relative rounded-3xl p-8 sm:p-10 bg-neutral-900 text-white flex flex-col justify-between overflow-hidden shadow-xl border border-neutral-800 transition-all hover:-translate-y-1 hover:shadow-2xl">
-        <div class="absolute top-0 right-0 -mr-16 -mt-16 w-56 h-56 bg-blue-500/10 rounded-full blur-2xl pointer-events-none"></div>
-        <div>
-          <div class="text-sm font-semibold text-blue-400 mb-3">Want to work together?</div>
-          <h4 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">Hire me.</h4>
-          <p class="text-sm text-neutral-300 leading-relaxed mb-8 max-w-sm">Message me on LinkedIn about internships, junior roles or projects.</p>
-        </div>
-        <div><a class="inline-flex px-7 py-3.5 rounded-full bg-white text-black text-sm font-bold hover:bg-neutral-200 transition-all" href="https://www.linkedin.com/in/rachid-serraf" target="_blank" rel="noopener">Message on LinkedIn</a></div>
+  <!-- Contact (particle hover) -->
+  <section class="max-w-6xl mx-auto px-6 pb-24">
+    <div class="stage" id="contact">
+      <canvas id="contact-canvas" aria-hidden="true"></canvas>
+      <div class="col" tabindex="-1">
+        <span class="pill">Want to work together?</span>
+        <h2>Hire me<span>Message me about internships, junior roles or projects.</span></h2>
+        <a class="btn" href="https://www.linkedin.com/in/rachid-serraf" target="_blank" rel="noopener">Message on LinkedIn</a>
       </div>
-      <div class="relative rounded-3xl p-8 sm:p-10 bg-white text-neutral-900 flex flex-col justify-between overflow-hidden shadow-lg border border-neutral-200 transition-all hover:-translate-y-1 hover:shadow-xl">
-        <div class="absolute top-0 right-0 -mr-16 -mt-16 w-56 h-56 bg-amber-400/10 rounded-full blur-2xl pointer-events-none"></div>
-        <div>
-          <div class="text-sm font-semibold text-neutral-600 mb-3">Read my code</div>
-          <h4 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">See it on GitHub.</h4>
-          <p class="text-sm text-neutral-600 leading-relaxed mb-8 max-w-sm">20 repositories, from microservices to a Rust shell.</p>
-        </div>
-        <div><a class="inline-flex px-7 py-3.5 rounded-full border-2 border-neutral-900 text-neutral-900 text-sm font-bold hover:bg-neutral-900 hover:text-white transition-all" href="https://github.com/rachid-serraf" target="_blank" rel="noopener">Open GitHub</a></div>
+      <div class="col" tabindex="-1">
+        <span class="pill">Read my code</span>
+        <h2>See it on GitHub<span>20 repositories, from microservices to a Rust shell.</span></h2>
+        <a class="btn alt" href="https://github.com/rachid-serraf" target="_blank" rel="noopener">Open GitHub</a>
       </div>
     </div>
   </section>
@@ -243,5 +261,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#fff;color:#0a0b0e;ov
   </footer>
 </main>
 <script src="main.js"></script>
+<script src="contact-particles.js"></script>
 </body>
 </html>
