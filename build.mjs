@@ -1,11 +1,13 @@
 // Usage: npm install && npm run build   ->  output in ./dist
 import { readFile, writeFile, rm, mkdir, stat } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { gzipSync, brotliCompressSync, constants } from 'node:zlib';
 import { minify as minifyHtml } from 'html-minifier-terser';
 import { minify as minifyJs } from 'terser';
 
-const JS_FILES = ['main.js', 'contact-particles.js'];
+// Optional extra scripts; the current design keeps its JS inside index.html
+const JS_FILES = ['main.js', 'contact-particles.js'].filter(existsSync);
 const out = (f) => `dist/${f}`;
 const kb = (n) => (n / 1024).toFixed(1) + ' KB';
 const size = async (f) => (await stat(f)).size;
@@ -20,7 +22,7 @@ execFileSync('npx', ['tailwindcss', '-c', 'tailwind.config.js', '-i', 'tailwind-
 let html = await readFile('index.html', 'utf8');
 html = html
   .replace(/<script src="https:\/\/cdn\.tailwindcss\.com[^>]*><\/script>\s*/, '<link rel="stylesheet" href="tailwind.css" />\n')
-  .replace(/<script>\s*tailwind\.config=[\s\S]*?<\/script>\s*/, '');
+  .replace(/<script>\s*tailwind\.config\s*=[\s\S]*?<\/script>\s*/, '');
 html = await minifyHtml(html, {
   collapseWhitespace: true,
   removeComments: true,
