@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "v5-angular": {
+    " portfolio": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:class": {
@@ -81,10 +81,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "v5-angular:build:production"
+              "buildTarget": " portfolio:build:production"
             },
             "development": {
-              "buildTarget": "v5-angular:build:development"
+              "buildTarget": " portfolio:build:development"
             }
           },
           "defaultConfiguration": "development"
