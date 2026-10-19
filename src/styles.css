@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+@theme {
+  --color-noir-950: #0a0a0c;
+  --color-noir-900: #121114;
+  --color-noir-850: #17161c;
+  --color-noir-800: #1e1c24;
+  --color-noir-700: #2b2732;
+  --color-noir-600: #3d3846;
+
+  --color-sand-50: #faf7f2;
+  --color-sand-100: #f4eedd;
+  --color-sand-200: #ebddcb;
+  --color-sand-300: #dec9b0;
+  --color-sand-400: #c8ae90;
+
+  --color-cyber-orange: #ff7a30;
+  --color-cyber-amber: #f59e0b;
+  --color-cyber-ochre: #e0a15e;
+  --color-cyber-coral: #f15a5a;
+  --color-cyber-sage: #5e8b71;
+  --color-cyber-neon: #22c55e;
+  --color-cyber-cyan: #38bdf8;
+
+  --font-sans: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --font-tech: "Chakra Petch", sans-serif;
+
+  --animate-scan: scanline 8s linear infinite;
+  --animate-ticker: ticker 32s linear infinite;
+  --animate-blink: blink 1s infinite;
+
+  @keyframes scanline {
+    0% {
+      transform: translateY(-100%);
+    }
+
+    100% {
+      transform: translateY(1000%);
+    }
+  }
+
+  @keyframes ticker {
+    0% {
+      transform: translateX(0%);
+    }
+
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes blink {
+
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0;
+    }
+  }
+}
+
+::selection {
+  background-color: #ff7a30;
+  color: #0a0a0c;
+}
+
+.crt-grid {
+  background-size: 40px 40px;
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+}
+
+.cmd-tab {
+  position: relative;
+  overflow: hidden;
+}
+
+.cmd-tab.active-progress::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: currentColor;
+  width: 0%;
+  animation: tabProgress 6s linear infinite;
+}
+
+@keyframes tabProgress {
+  0% {
+    width: 0%;
+  }
+
+  100% {
+    width: 100%;
+  }
+}
+
+.tab-content-panel {
+  display: none;
+}
+
+.tab-content-panel.active {
+  display: block;
+  animation: panelIn 0.35s ease;
+}
+
+@keyframes panelIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.cli-theme-emerald {
+  --cli-accent: #22c55e;
+}
+
+.cli-theme-cyan {
+  --cli-accent: #38bdf8;
+}
+
+.cli-theme-amber {
+  --cli-accent: #ff7a30;
+}
+
+.cli-accent-bg {
+  background-color: var(--cli-accent);
+}
+
+.cli-accent-text {
+  color: var(--cli-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
