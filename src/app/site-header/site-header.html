@@ -1,36 +1,53 @@
 <!-- Navigation -->
 <header
-  class="sticky top-0 z-50 backdrop-blur-md bg-noir-950/90 border-b border-noir-700/70 px-4 sm:px-8 py-3.5 transition-all">
+  class="sticky top-0 z-50 backdrop-blur-md bg-[var(--bg-page)]/90 border-b border-[var(--border)]/70 px-4 sm:px-8 py-3.5 transition-all">
   <div class="max-w-7xl mx-auto flex items-center justify-between">
     <a aria-label="Rachid Serraf Home" class="flex items-center space-x-3 group" href="#">
       <div class="flex flex-col">
         <div class="flex items-center space-x-2">
           <span
-            class="font-mono font-bold tracking-tight text-sm text-sand-50 uppercase group-hover:text-cyber-orange transition-colors">Rachid
+            class="font-mono font-bold tracking-tight text-sm text-[var(--text-primary)] uppercase group-hover:text-cyber-orange transition-colors">Rachid
             Serraf</span>
           <span
-            class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-noir-800 border border-noir-600 text-cyber-sage uppercase">v2.6</span>
+            class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[var(--bg-raised)] border border-[var(--border-strong)] text-cyber-sage uppercase">v2.6</span>
         </div>
-        <span class="text-[11px] font-mono text-sand-400 tracking-wide">Full Stack &amp; Systems Builder</span>
+        <span class="text-[11px] font-mono text-[var(--text-muted)] tracking-wide">Full Stack &amp; Systems Builder</span>
       </div>
     </a>
     <nav
-      class="hidden md:flex items-center space-x-1 lg:space-x-2 bg-noir-900/80 px-3 py-1.5 rounded-full border border-noir-700/80 text-xs font-mono">
-      <a class="px-2 py-1.5 rounded-full text-sand-300 hover:text-sand-50 hover:bg-noir-800 transition"
+      class="hidden md:flex items-center space-x-1 lg:space-x-2 bg-[var(--bg-surface)]/80 px-3 py-1.5 rounded-full border border-[var(--border)]/80 text-xs font-mono">
+      <a class="px-2 py-1.5 rounded-full text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-raised)] transition"
         href="#about">01 // About</a>
-      <a class="px-2 py-1.5 rounded-full text-sand-300 hover:text-sand-50 hover:bg-noir-800 transition"
+      <a class="px-2 py-1.5 rounded-full text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-raised)] transition"
         href="#workbench" (click)="tabJump.emit('projects')">02 // Projects</a>
-      <a class="px-2 py-1.5 rounded-full text-sand-300 hover:text-sand-50 hover:bg-noir-800 transition"
+      <a class="px-2 py-1.5 rounded-full text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-raised)] transition"
         href="#stream">03 // Stream</a>
-      <a class="px-2 py-1.5 rounded-full text-sand-300 hover:text-sand-50 hover:bg-noir-800 transition"
+      <a class="px-2 py-1.5 rounded-full text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-raised)] transition"
         href="#workbench" (click)="tabJump.emit('server')">04 // Server.yml</a>
-      <a class="px-2 py-1.5 rounded-full text-sand-300 hover:text-sand-50 hover:bg-noir-800 transition"
+      <a class="px-2 py-1.5 rounded-full text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-raised)] transition"
         href="#workbench" (click)="tabJump.emit('stack')">05 // Stack.json</a>
-      <a class="px-2 py-1.5 rounded-full text-sand-300 hover:text-sand-50 hover:bg-noir-800 transition"
+      <a class="px-2 py-1.5 rounded-full text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-raised)] transition"
         href="#experience">06 // Journey</a>
     </nav>
     <div class="flex items-center space-x-3">
-      <a class="hidden sm:inline-flex items-center space-x-1.5 font-mono text-xs px-3.5 py-2 rounded-lg bg-noir-850 hover:bg-noir-800 border border-noir-700 text-sand-200 transition hover:border-sand-400"
+      <button type="button" (click)="toggleTheme()"
+        [attr.aria-label]="theme() === 'light' ? 'Switch to dark mode' : 'Switch to light mode'"
+        [attr.title]="theme() === 'light' ? 'Dark mode' : 'Light mode'"
+        class="h-8 w-8 rounded-lg bg-[var(--bg-raised)] border border-[var(--border)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-raised-2)] transition flex items-center justify-center">
+        @if (theme() === 'light') {
+          <svg aria-hidden="true" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" viewBox="0 0 24 24">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+          </svg>
+        } @else {
+          <svg aria-hidden="true" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+          </svg>
+        }
+      </button>
+      <a class="hidden sm:inline-flex items-center space-x-1.5 font-mono text-xs px-3.5 py-2 rounded-lg bg-[var(--bg-raised)] hover:bg-[var(--bg-raised-2)] border border-[var(--border)] text-[var(--text-secondary)] transition hover:border-[var(--border-strong)]"
         href="https://github.com/rachid-serraf" rel="noopener noreferrer" target="_blank">
         <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
           <path

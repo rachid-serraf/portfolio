@@ -1,13 +1,13 @@
 <!-- Wave stream -->
 <section class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" data-purpose="oscilloscope-stream" id="stream">
-  <div class="bg-noir-900/90 border border-noir-700 rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-2xl">
-    <div class="flex flex-wrap items-center justify-between gap-4 mb-4 pb-4 border-b border-noir-800">
+  <div class="bg-[var(--bg-surface)]/90 border border-[var(--border)] rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-2xl">
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-4 pb-4 border-b border-[var(--border-inset)]">
       <div>
         <div
           class="flex items-center space-x-2 text-cyber-orange font-mono text-xs font-bold uppercase tracking-widest">
           <span>LIVE STREAM // FRONTEND → BACKEND → DEVOPS</span>
         </div>
-        <h2 class="text-2xl sm:text-3xl font-tech font-bold text-sand-50 uppercase tracking-tight mt-1">From the
+        <h2 class="text-2xl sm:text-3xl font-tech font-bold text-[var(--text-primary)] uppercase tracking-tight mt-1">From the
           browser to the server rack.</h2>
       </div>
       <div class="flex items-center space-x-2 text-xs font-mono">
@@ -20,16 +20,16 @@
       </div>
     </div>
     <div
-      class="relative w-full h-48 sm:h-64 rounded-2xl overflow-hidden bg-noir-950 border border-noir-800 cursor-crosshair">
+      class="relative w-full h-48 sm:h-64 rounded-2xl overflow-hidden bg-[var(--bg-inset)] border border-[var(--border-inset)] cursor-crosshair">
       <canvas #canvas class="w-full h-full block" aria-hidden="true"></canvas>
       <div
-        class="absolute bottom-3 left-4 font-mono text-[10px] text-sand-400 pointer-events-none flex items-center space-x-4">
-        <span>FREQ: <strong class="text-sand-100">60.00 Hz</strong></span>
+        class="absolute bottom-3 left-4 font-mono text-[10px] text-[var(--text-muted)] pointer-events-none flex items-center space-x-4">
+        <span>FREQ: <strong class="text-[var(--text-body)]">60.00 Hz</strong></span>
         <span class="hidden sm:inline">MODULATION: <strong class="text-cyber-orange">HARMONIC</strong></span>
         <span class="hidden sm:inline">INTERACTIVE: <strong class="text-cyber-neon">MOUSE HOVER
             ACTIVE</strong></span>
       </div>
-      <div class="absolute top-3 right-4 font-mono text-[10px] text-sand-400 pointer-events-none">STREAM_SYNC: <span
+      <div class="absolute top-3 right-4 font-mono text-[10px] text-[var(--text-muted)] pointer-events-none">STREAM_SYNC: <span
           class="text-cyber-neon font-bold">LOCKED</span></div>
     </div>
   </div>

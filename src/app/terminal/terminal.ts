@@ -50,7 +50,7 @@ export class Terminal implements OnInit {
   readonly tabOn =
     'cmd-tab px-3 py-1 rounded cli-accent-bg text-noir-950 font-bold transition active-progress';
   readonly tabOff =
-    'cmd-tab px-3 py-1 rounded bg-noir-800 hover:bg-noir-700 text-sand-200 border border-noir-700 transition';
+    'cmd-tab px-3 py-1 rounded bg-[var(--bg-raised)] hover:bg-[var(--bg-raised-2)] text-[var(--text-secondary)] border border-[var(--border)] transition';
 
   readonly active = signal(COMMANDS[0].key);
   readonly cmdDisplay = signal(COMMANDS[0].cmd);

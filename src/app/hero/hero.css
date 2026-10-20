@@ -1,0 +1,92 @@
+.bento2 {
+    --g: 12px;
+    /* gap between panels */
+    --r: 28px;
+    /* radius of the cut-outs */
+    --ear: 22px;
+    /* concave (inverted) corner size */
+    --cut: var(--color-cream);
+    /* container color = color of the cut-outs */
+    background: var(--cut);
+}
+
+/* small screens: cut-outs are plain blocks */
+.cut-bl {
+    margin-top: var(--g);
+}
+
+.cut-r {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+@media (min-width: 1280px) {
+
+    /* ---- bottom-left cut-out (holds the orange panel) ---- */
+    .cut-bl {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        margin: 0;
+        z-index: 5;
+        padding: var(--g) var(--g) 0 0;
+        background: var(--cut);
+        border-top-right-radius: var(--r);
+    }
+
+    .cut-bl::before,
+    .cut-bl::after {
+        content: "";
+        position: absolute;
+        width: var(--ear);
+        height: var(--ear);
+        background: radial-gradient(circle at 100% 0,
+                transparent calc(var(--ear) - .5px), var(--cut) var(--ear));
+    }
+
+    .cut-bl::before {
+        left: 0;
+        bottom: 100%;
+    }
+
+    /* above the cut-out */
+    .cut-bl::after {
+        left: 100%;
+        bottom: 0;
+    }
+
+    /* right of the cut-out */
+
+    /* ---- right-edge cut-out (holds the round arrow button) ---- */
+    .cut-r {
+        top: 50%;
+        right: calc(var(--g) * -1);
+        transform: translateY(-50%);
+        z-index: 5;
+        padding: var(--g);
+        background: var(--cut);
+        border-radius: var(--r) 0 0 var(--r);
+    }
+
+    .cut-r::before,
+    .cut-r::after {
+        content: "";
+        position: absolute;
+        right: var(--g);
+        width: var(--ear);
+        height: var(--ear);
+    }
+
+    .cut-r::before {
+        bottom: 100%;
+        background: radial-gradient(circle at 0 0,
+                transparent calc(var(--ear) - .5px), var(--cut) var(--ear));
+    }
+
+    .cut-r::after {
+        top: 100%;
+        background: radial-gradient(circle at 0 100%,
+                transparent calc(var(--ear) - .5px), var(--cut) var(--ear));
+    }
+}

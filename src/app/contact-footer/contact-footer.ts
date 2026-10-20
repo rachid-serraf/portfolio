@@ -86,9 +86,13 @@ export class ContactFooter implements AfterViewInit {
       });
     }
 
+    const rootStyle = getComputedStyle(document.documentElement);
+    const orangeRgb = rootStyle.getPropertyValue('--color-cyber-orange-rgb').trim();
+    const ringParticle = rootStyle.getPropertyValue('--color-ring-particle').trim();
+
     const render = (): void => {
       ctx.clearRect(0, 0, width, height);
-      ctx.fillStyle = this.mode === 'brackets' ? 'rgba(255,122,48,.7)' : 'rgba(24,20,20,.8)';
+      ctx.fillStyle = this.mode === 'brackets' ? `rgba(${orangeRgb},.7)` : ringParticle;
       particles.forEach((p) => {
         const t = targets[p.i];
         const dx = (this.mode === 'brackets' ? t.bx : t.rx) - p.x;

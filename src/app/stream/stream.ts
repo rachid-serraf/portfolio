@@ -2,19 +2,21 @@ import { AfterViewInit, Component, DestroyRef, ElementRef, NgZone, ViewChild, in
 
 type WaveLine = [rgb: string, speed: number, amplitude: number, frequency: number, phase: number, yOffset: number];
 
-const LINES: WaveLine[] = [
-  ['234,160,66', 0.95, 46, 0.0048, 0, -12],
-  ['94,139,113', 1.25, 52, 0.0054, 0.75, -6],
-  ['255,107,107', 1.1, 40, 0.0062, 1.45, 4],
-  ['200,194,186', 1.35, 58, 0.0051, 2.15, -8],
-  ['234,160,66', 1.45, 62, 0.0068, 2.9, 0],
-  ['94,139,113', 1.15, 48, 0.0058, 3.65, 8],
-  ['255,107,107', 1.05, 44, 0.0064, 4.4, -4],
-  ['200,194,186', 0.85, 38, 0.0042, 5.15, 6],
-  ['234,160,66', 1.2, 50, 0.0046, 5.9, -2],
+const LINE_DEFS: [varName: string, speed: number, amplitude: number, frequency: number, phase: number, yOffset: number][] = [
+  ['--color-amber-rgb', 0.95, 46, 0.0048, 0, -12],
+  ['--color-cyber-sage-rgb', 1.25, 52, 0.0054, 0.75, -6],
+  ['--color-salmon-rgb', 1.1, 40, 0.0062, 1.45, 4],
+  ['--color-silver-rgb', 1.35, 58, 0.0051, 2.15, -8],
+  ['--color-amber-rgb', 1.45, 62, 0.0068, 2.9, 0],
+  ['--color-cyber-sage-rgb', 1.15, 48, 0.0058, 3.65, 8],
+  ['--color-salmon-rgb', 1.05, 44, 0.0064, 4.4, -4],
+  ['--color-silver-rgb', 0.85, 38, 0.0042, 5.15, 6],
+  ['--color-amber-rgb', 1.2, 50, 0.0046, 5.9, -2],
 ];
 
-const DUST = ['#EAA042', '#5E8B71', '#FF6B6B', '#C8C2BA', '#EAA042', '#5E8B71'];
+const DUST_VARS = ['--color-amber', '--color-cyber-sage', '--color-salmon', '--color-silver', '--color-amber', '--color-cyber-sage'];
+
+const cssVar = (name: string): string => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
 @Component({
   selector: 'app-stream',
@@ -37,6 +39,8 @@ export class Stream implements AfterViewInit {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const abort = new AbortController();
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const lines: WaveLine[] = LINE_DEFS.map(([v, ...rest]) => [cssVar(v), ...rest]);
+    const dust = DUST_VARS.map(cssVar);
     let w = 0;
     let h = 0;
     let sc = 1;
@@ -65,7 +69,7 @@ export class Stream implements AfterViewInit {
         m.y += (m.ty - m.y) * 0.08;
         m.s += ((m.on ? 1 : 0) - m.s) * 0.06;
         ctx.clearRect(0, 0, w, h);
-        LINES.forEach(([rgb, speed, amp, fr, ph, yo]) => {
+        lines.forEach(([rgb, speed, amp, fr, ph, yo]) => {
           const cy = h / 2 + yo * sc;
           ctx.beginPath();
           ctx.moveTo(0, cy);
@@ -90,7 +94,7 @@ export class Stream implements AfterViewInit {
           const py = h / 2 + Math.sin(px * 0.0055 + t * 0.9 + i) * 58 * sc;
           ctx.beginPath();
           ctx.arc(px, py, (i % 3) * 0.5 + 0.9, 0, 6.2832);
-          ctx.fillStyle = DUST[i % 6];
+          ctx.fillStyle = dust[i % 6];
           ctx.shadowBlur = 8;
           ctx.shadowColor = ctx.fillStyle;
           ctx.globalAlpha = 0.65;

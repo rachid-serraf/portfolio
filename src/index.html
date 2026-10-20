@@ -14,10 +14,20 @@
     href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,600;0,700;1,500&amp;family=JetBrains+Mono:wght@300;400;500;700;800&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap"
     rel="stylesheet">
   <link rel="icon" type="image/x-icon" href="favicon.png">
+  <script>
+    (function () {
+      var theme = null;
+      try { theme = localStorage.getItem('theme'); } catch (e) { /* storage unavailable */ }
+      if (theme !== 'light' && theme !== 'dark') {
+        theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      }
+      if (theme === 'light') document.documentElement.classList.add('light');
+    })();
+  </script>
 </head>
 
 <body
-  class="bg-[#0a0a0c] text-sand-100 font-sans antialiased selection:bg-cyber-orange selection:text-noir-950 relative overflow-x-hidden min-h-screen crt-grid cli-theme-amber">
+  class="bg-[var(--bg-page)] text-[var(--text-body)] font-sans antialiased selection:bg-cyber-orange selection:text-noir-950 relative overflow-x-hidden min-h-screen crt-grid cli-theme-amber">
   <app-root></app-root>
 </body>
 

@@ -63,15 +63,88 @@
   }
 }
 
+:root {
+  color-scheme: dark;
+
+  --cli-accent: #ff7a30;
+
+  /* ---- theme surfaces (dark = default) ---- */
+  --bg-page: #0a0a0c;
+  --bg-surface: #121114;
+  --bg-raised: #1e1c24;
+  --bg-raised-2: #2b2732;
+  --bg-inset: #0a0a0c;
+  --bg-card: #f4eedd;
+
+  /* ---- theme text ---- */
+  --text-primary: #faf7f2;
+  --text-body: #f4eedd;
+  --text-secondary: #ebddcb;
+  --text-tertiary: #dec9b0;
+  --text-muted: #c8ae90;
+
+  /* ---- theme borders ---- */
+  --border: #2b2732;
+  --border-strong: #3d3846;
+  --border-inset: #1e1c24;
+
+  --color-cream: #f4ebd8;
+  --color-gold: #e9a23f;
+  --color-warm-gray: #cbc3b7;
+  --color-dark-panel: #111114;
+  --color-dark-pill: #1f1f24;
+  --color-muted: #8a8478;
+  --color-amber: #eaa042;
+  --color-silver: #c8c2ba;
+  --color-salmon: #ff6b6b;
+  --color-ring-particle: rgba(24, 20, 20, 0.8);
+
+  --color-amber-rgb: 234, 160, 66;
+  --color-salmon-rgb: 255, 107, 107;
+  --color-silver-rgb: 200, 194, 186;
+  --color-cyber-sage-rgb: 94, 139, 113;
+  --color-cyber-orange-rgb: 255, 122, 48;
+  --color-cyber-ochre-rgb: 224, 161, 94;
+
+  --color-grid-line: rgba(255, 255, 255, 0.025);
+}
+
+html.light {
+  color-scheme: light;
+
+  --bg-page: #f5f0e6;
+  --bg-surface: #fffdf8;
+  --bg-raised: #ffffff;
+  --bg-raised-2: #ebe3d2;
+  --bg-inset: #f1ead9;
+  --bg-card: #ffffff;
+
+  --text-primary: #16131b;
+  --text-body: #2b2732;
+  --text-secondary: #413b50;
+  --text-tertiary: #5c5670;
+  --text-muted: #857c6a;
+
+  --border: #e3d9c4;
+  --border-strong: #cdbfa5;
+  --border-inset: #e6dcc7;
+
+  --color-grid-line: rgba(20, 16, 12, 0.045);
+}
+
+html.light .bento2 {
+  --cut: #fffdf9;
+}
+
 ::selection {
-  background-color: #ff7a30;
-  color: #0a0a0c;
+  background-color: var(--color-cyber-orange);
+  color: var(--color-noir-950);
 }
 
 .crt-grid {
   background-size: 40px 40px;
-  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-image: linear-gradient(to right, var(--color-grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-grid-line) 1px, transparent 1px);
 }
 
 .cmd-tab {
@@ -122,15 +195,15 @@
 }
 
 .cli-theme-emerald {
-  --cli-accent: #22c55e;
+  --cli-accent: var(--color-cyber-neon);
 }
 
 .cli-theme-cyan {
-  --cli-accent: #38bdf8;
+  --cli-accent: var(--color-cyber-cyan);
 }
 
 .cli-theme-amber {
-  --cli-accent: #ff7a30;
+  --cli-accent: var(--color-cyber-orange);
 }
 
 .cli-accent-bg {

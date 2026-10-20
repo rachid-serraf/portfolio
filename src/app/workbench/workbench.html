@@ -1,17 +1,17 @@
 <!-- Workbench -->
-<section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-noir-800"
+<section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-[var(--border-inset)]"
   data-purpose="tabbed-workbench" id="workbench">
-  <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-6 border-b border-noir-800 gap-6">
+  <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-6 border-b border-[var(--border-inset)] gap-6">
     <div>
       <div
         class="flex items-center space-x-2 text-cyber-orange font-mono text-xs font-bold uppercase tracking-widest">
         <span>// PROJECTS, STACK &amp; SERVER</span><span>·</span><span>AUTO-TAB WORKBENCH</span>
       </div>
-      <h2 class="text-3xl sm:text-4xl font-tech font-bold uppercase text-sand-50 tracking-tight mt-1">Workbench
+      <h2 class="text-3xl sm:text-4xl font-tech font-bold uppercase text-[var(--text-primary)] tracking-tight mt-1">Workbench
         &amp; System Artefacts</h2>
     </div>
     <div
-      class="flex items-center space-x-2 font-mono text-xs bg-noir-900 p-1.5 rounded-2xl border border-noir-700/80">
+      class="flex items-center space-x-2 font-mono text-xs bg-[var(--bg-surface)] p-1.5 rounded-2xl border border-[var(--border)]/80">
       <button [class]="active() === 'projects' ? tabOn : tabOff" (click)="setTab('projects')">01 // Projects.md</button>
       <button [class]="active() === 'stack' ? tabOn : tabOff" (click)="setTab('stack')">02 // Stack.json</button>
       <button [class]="active() === 'server' ? tabOn : tabOff" (click)="setTab('server')">03 // Server.yml</button>
@@ -22,7 +22,7 @@
   <div class="tab-content-panel" [class.active]="active() === 'projects'">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
       <article
-        class="bg-[#EAA042] text-noir-950 rounded-3xl p-6 sm:p-7 flex flex-col justify-between shadow-xl transition-all duration-300 hover:-translate-y-1.5 hover:shadow-cyber-orange/20 relative group">
+        class="bg-[var(--color-amber)] text-noir-950 rounded-3xl p-6 sm:p-7 flex flex-col justify-between shadow-xl transition-all duration-300 hover:-translate-y-1.5 hover:shadow-cyber-orange/20 relative group">
         <div class="flex items-start justify-between">
           <div>
             <div class="flex items-center space-x-2"><span
@@ -32,7 +32,7 @@
               MICROSERVICES</span>
           </div>
           <a aria-label="Open Buy-01 Repository"
-            class="w-12 h-12 rounded-2xl bg-noir-950 text-sand-50 flex items-center justify-center font-bold text-2xl transition group-hover:bg-noir-850 group-hover:rotate-12"
+            class="w-12 h-12 rounded-2xl bg-noir-950 text-[var(--text-primary)] flex items-center justify-center font-bold text-2xl transition group-hover:bg-noir-850 group-hover:rotate-12"
             href="https://github.com/rachid-serraf/Buy-01" rel="noopener noreferrer" target="_blank">↗</a>
         </div>
         <div class="my-5 p-3 rounded-xl bg-noir-950/10 border border-noir-950/20 font-mono text-xs space-y-2">
@@ -53,7 +53,7 @@
       </article>
 
       <article
-        class="bg-[#5E8B71] text-noir-950 rounded-3xl p-6 sm:p-7 flex flex-col justify-between shadow-xl transition-all duration-300 hover:-translate-y-1.5 relative group">
+        class="bg-cyber-sage text-noir-950 rounded-3xl p-6 sm:p-7 flex flex-col justify-between shadow-xl transition-all duration-300 hover:-translate-y-1.5 relative group">
         <div class="flex items-start justify-between">
           <div>
             <div class="flex items-center space-x-2"><span
@@ -105,7 +105,7 @@
       </article>
 
       <article
-        class="bg-[#C8C2BA] text-noir-950 rounded-3xl p-6 sm:p-7 flex flex-col justify-between shadow-xl transition-all duration-300 hover:-translate-y-1.5 relative group">
+        class="bg-[var(--color-silver)] text-noir-950 rounded-3xl p-6 sm:p-7 flex flex-col justify-between shadow-xl transition-all duration-300 hover:-translate-y-1.5 relative group">
         <div class="flex items-start justify-between">
           <div>
             <div class="flex items-center space-x-2"><span
@@ -133,33 +133,33 @@
       </article>
 
       <article
-        class="bg-noir-900 border border-noir-700 text-sand-100 rounded-3xl p-6 sm:p-7 flex flex-col justify-between shadow-xl transition-all duration-300 hover:-translate-y-1.5 hover:border-cyber-orange relative group">
+        class="bg-[var(--bg-surface)] border border-[var(--border)] text-[var(--text-body)] rounded-3xl p-6 sm:p-7 flex flex-col justify-between shadow-xl transition-all duration-300 hover:-translate-y-1.5 hover:border-cyber-orange relative group">
         <div class="flex items-start justify-between">
           <div>
             <div class="flex items-center space-x-2"><span
-                class="text-2xl font-tech font-bold tracking-tight text-sand-50">FACEBOOK-LIKE</span><span
+                class="text-2xl font-tech font-bold tracking-tight text-[var(--text-primary)]">FACEBOOK-LIKE</span><span
                 class="text-[10px] font-mono px-1.5 py-0.5 bg-cyber-orange text-noir-950 rounded uppercase font-bold">JS</span>
             </div>
-            <span class="text-[10px] font-mono font-bold tracking-wider uppercase text-sand-400">SOCIAL NETWORK
+            <span class="text-[10px] font-mono font-bold tracking-wider uppercase text-[var(--text-muted)]">SOCIAL NETWORK
               APP</span>
           </div>
           <a aria-label="Open facebook-like Repository"
-            class="w-12 h-12 rounded-2xl bg-noir-800 border border-noir-700 text-sand-50 flex items-center justify-center font-bold text-2xl transition group-hover:bg-cyber-orange group-hover:text-noir-950 group-hover:rotate-12"
+            class="w-12 h-12 rounded-2xl bg-[var(--bg-raised)] border border-[var(--border)] text-[var(--text-primary)] flex items-center justify-center font-bold text-2xl transition group-hover:bg-cyber-orange group-hover:text-noir-950 group-hover:rotate-12"
             href="https://github.com/rachid-serraf/facebook-like" rel="noopener noreferrer" target="_blank">↗</a>
         </div>
-        <div class="my-5 p-3 rounded-xl bg-noir-950 border border-noir-800 font-mono text-xs space-y-1">
+        <div class="my-5 p-3 rounded-xl bg-[var(--bg-inset)] border border-[var(--border-inset)] font-mono text-xs space-y-1">
           <div class="text-cyber-orange font-bold text-[10px] uppercase tracking-wider">BUILT WITH:</div>
-          <div class="text-sand-300">JavaScript</div>
+          <div class="text-[var(--text-tertiary)]">JavaScript</div>
         </div>
-        <p class="text-xs font-mono leading-relaxed text-sand-300 mb-6">Social network app built with JavaScript.
+        <p class="text-xs font-mono leading-relaxed text-[var(--text-tertiary)] mb-6">Social network app built with JavaScript.
         </p>
         <div
-          class="pt-4 border-t border-noir-800 flex items-center justify-between font-mono text-[10px] text-sand-400">
+          class="pt-4 border-t border-[var(--border-inset)] flex items-center justify-between font-mono text-[10px] text-[var(--text-muted)]">
           <span>JAVASCRIPT</span><span class="text-cyber-orange">ZONE01 PROJECT</span></div>
       </article>
 
       <article
-        class="bg-gradient-to-br from-noir-900 via-noir-850 to-noir-950 border-2 border-dashed border-noir-700 rounded-3xl p-6 sm:p-7 flex flex-col justify-between items-center text-center shadow-xl">
+        class="bg-gradient-to-br from-noir-900 via-noir-850 to-noir-950 border-2 border-dashed border-[var(--border)] rounded-3xl p-6 sm:p-7 flex flex-col justify-between items-center text-center shadow-xl">
         <div
           class="w-16 h-16 rounded-full bg-cyber-orange/10 border border-cyber-orange/30 flex items-center justify-center text-cyber-orange text-2xl font-bold font-mono">
           20</div>
@@ -180,71 +180,71 @@
   <!-- Stack -->
   <div class="tab-content-panel" [class.active]="active() === 'stack'">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 font-mono">
-      <div class="bg-noir-900 border border-noir-700/80 rounded-3xl p-6 flex flex-col justify-between">
+      <div class="bg-[var(--bg-surface)] border border-[var(--border)]/80 rounded-3xl p-6 flex flex-col justify-between">
         <div>
           <div class="flex items-center justify-between mb-4"><span
               class="text-xs text-cyber-orange font-bold uppercase">// 01 FRONTEND</span><span
-              class="text-[10px] text-sand-400">UI / UX / DOM</span></div>
+              class="text-[10px] text-[var(--text-muted)]">UI / UX / DOM</span></div>
           <div class="flex flex-wrap gap-2">
-            <span class="px-3 py-1.5 rounded-lg bg-noir-950 border border-noir-800 text-sand-100 text-xs">React.js</span>
-            <span class="px-3 py-1.5 rounded-lg bg-noir-950 border border-noir-800 text-sand-100 text-xs">Angular</span>
-            <span class="px-3 py-1.5 rounded-lg bg-noir-950 border border-noir-800 text-sand-100 text-xs">Next.js</span>
-            <span class="px-3 py-1.5 rounded-lg bg-noir-950 border border-noir-800 text-sand-100 text-xs">TypeScript</span>
-            <span class="px-3 py-1.5 rounded-lg bg-noir-950 border border-noir-800 text-sand-100 text-xs">JavaScript
+            <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-inset)] border border-[var(--border-inset)] text-[var(--text-body)] text-xs">React.js</span>
+            <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-inset)] border border-[var(--border-inset)] text-[var(--text-body)] text-xs">Angular</span>
+            <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-inset)] border border-[var(--border-inset)] text-[var(--text-body)] text-xs">Next.js</span>
+            <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-inset)] border border-[var(--border-inset)] text-[var(--text-body)] text-xs">TypeScript</span>
+            <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-inset)] border border-[var(--border-inset)] text-[var(--text-body)] text-xs">JavaScript
               (ES6+)</span>
-            <span class="px-3 py-1.5 rounded-lg bg-noir-950 border border-noir-800 text-sand-100 text-xs">Tailwind
+            <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-inset)] border border-[var(--border-inset)] text-[var(--text-body)] text-xs">Tailwind
               CSS</span>
-            <span class="px-3 py-1.5 rounded-lg bg-noir-950 border border-noir-800 text-sand-100 text-xs">Angular
+            <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-inset)] border border-[var(--border-inset)] text-[var(--text-body)] text-xs">Angular
               Material</span>
-            <span class="px-3 py-1.5 rounded-lg bg-noir-950 border border-noir-800 text-sand-100 text-xs">HTML5 /
+            <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-inset)] border border-[var(--border-inset)] text-[var(--text-body)] text-xs">HTML5 /
               CSS3</span>
           </div>
         </div>
-        <div class="mt-6 pt-4 border-t border-noir-800 text-[11px] text-sand-400">Component architecture, responsive
+        <div class="mt-6 pt-4 border-t border-[var(--border-inset)] text-[11px] text-[var(--text-muted)]">Component architecture, responsive
           layouts, web application state management.</div>
       </div>
-      <div class="bg-noir-900 border border-noir-700/80 rounded-3xl p-6 flex flex-col justify-between">
+      <div class="bg-[var(--bg-surface)] border border-[var(--border)]/80 rounded-3xl p-6 flex flex-col justify-between">
         <div>
           <div class="flex items-center justify-between mb-4"><span
               class="text-xs text-cyber-ochre font-bold uppercase">// 02 BACKEND &amp; SYSTEMS</span><span
-              class="text-[10px] text-sand-400">CONCURRENCY &amp; APIS</span></div>
+              class="text-[10px] text-[var(--text-muted)]">CONCURRENCY &amp; APIS</span></div>
           <div class="flex flex-wrap gap-2">
-            <span class="px-3 py-1.5 rounded-lg bg-noir-950 border border-noir-800 text-sand-100 text-xs">Java</span>
-            <span class="px-3 py-1.5 rounded-lg bg-noir-950 border border-noir-800 text-cyber-ochre font-bold text-xs">Spring
+            <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-inset)] border border-[var(--border-inset)] text-[var(--text-body)] text-xs">Java</span>
+            <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-inset)] border border-[var(--border-inset)] text-cyber-ochre font-bold text-xs">Spring
               Boot</span>
-            <span class="px-3 py-1.5 rounded-lg bg-noir-950 border border-noir-800 text-sand-100 text-xs">Go
+            <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-inset)] border border-[var(--border-inset)] text-[var(--text-body)] text-xs">Go
               (Golang)</span>
-            <span class="px-3 py-1.5 rounded-lg bg-noir-950 border border-noir-800 text-cyber-coral font-bold text-xs">Rust</span>
-            <span class="px-3 py-1.5 rounded-lg bg-noir-950 border border-noir-800 text-sand-100 text-xs">Node.js</span>
-            <span class="px-3 py-1.5 rounded-lg bg-noir-950 border border-noir-800 text-sand-100 text-xs">WebSockets</span>
-            <span class="px-3 py-1.5 rounded-lg bg-noir-950 border border-noir-800 text-sand-100 text-xs">GraphQL</span>
-            <span class="px-3 py-1.5 rounded-lg bg-noir-950 border border-noir-800 text-sand-100 text-xs">REST
+            <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-inset)] border border-[var(--border-inset)] text-cyber-coral font-bold text-xs">Rust</span>
+            <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-inset)] border border-[var(--border-inset)] text-[var(--text-body)] text-xs">Node.js</span>
+            <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-inset)] border border-[var(--border-inset)] text-[var(--text-body)] text-xs">WebSockets</span>
+            <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-inset)] border border-[var(--border-inset)] text-[var(--text-body)] text-xs">GraphQL</span>
+            <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-inset)] border border-[var(--border-inset)] text-[var(--text-body)] text-xs">REST
               APIs</span>
           </div>
         </div>
-        <div class="mt-6 pt-4 border-t border-noir-800 text-[11px] text-sand-400">Microservices, Unix system
+        <div class="mt-6 pt-4 border-t border-[var(--border-inset)] text-[11px] text-[var(--text-muted)]">Microservices, Unix system
           programming, real-time communication.</div>
       </div>
-      <div class="bg-noir-900 border border-noir-700/80 rounded-3xl p-6 flex flex-col justify-between">
+      <div class="bg-[var(--bg-surface)] border border-[var(--border)]/80 rounded-3xl p-6 flex flex-col justify-between">
         <div>
           <div class="flex items-center justify-between mb-4"><span
               class="text-xs text-cyber-neon font-bold uppercase">// 03 DEVOPS &amp; STORAGE</span><span
-              class="text-[10px] text-sand-400">DEPLOY &amp; RUNTIME</span></div>
+              class="text-[10px] text-[var(--text-muted)]">DEPLOY &amp; RUNTIME</span></div>
           <div class="flex flex-wrap gap-2">
-            <span class="px-3 py-1.5 rounded-lg bg-noir-950 border border-noir-800 text-cyber-neon font-bold text-xs">Docker</span>
-            <span class="px-3 py-1.5 rounded-lg bg-noir-950 border border-noir-800 text-sand-100 text-xs">Oracle
+            <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-inset)] border border-[var(--border-inset)] text-cyber-neon font-bold text-xs">Docker</span>
+            <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-inset)] border border-[var(--border-inset)] text-[var(--text-body)] text-xs">Oracle
               Cloud</span>
-            <span class="px-3 py-1.5 rounded-lg bg-noir-950 border border-noir-800 text-sand-100 text-xs">Nginx</span>
-            <span class="px-3 py-1.5 rounded-lg bg-noir-950 border border-noir-800 text-sand-100 text-xs">PostgreSQL</span>
-            <span class="px-3 py-1.5 rounded-lg bg-noir-950 border border-noir-800 text-sand-100 text-xs">MongoDB</span>
-            <span class="px-3 py-1.5 rounded-lg bg-noir-950 border border-noir-800 text-sand-100 text-xs">Redis</span>
-            <span class="px-3 py-1.5 rounded-lg bg-noir-950 border border-noir-800 text-sand-100 text-xs">Git /
+            <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-inset)] border border-[var(--border-inset)] text-[var(--text-body)] text-xs">Nginx</span>
+            <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-inset)] border border-[var(--border-inset)] text-[var(--text-body)] text-xs">PostgreSQL</span>
+            <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-inset)] border border-[var(--border-inset)] text-[var(--text-body)] text-xs">MongoDB</span>
+            <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-inset)] border border-[var(--border-inset)] text-[var(--text-body)] text-xs">Redis</span>
+            <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-inset)] border border-[var(--border-inset)] text-[var(--text-body)] text-xs">Git /
               Gitea</span>
-            <span class="px-3 py-1.5 rounded-lg bg-noir-950 border border-noir-800 text-sand-100 text-xs">Linux /
+            <span class="px-3 py-1.5 rounded-lg bg-[var(--bg-inset)] border border-[var(--border-inset)] text-[var(--text-body)] text-xs">Linux /
               Bash</span>
           </div>
         </div>
-        <div class="mt-6 pt-4 border-t border-noir-800 text-[11px] text-sand-400">Containers, reverse proxy,
+        <div class="mt-6 pt-4 border-t border-[var(--border-inset)] text-[11px] text-[var(--text-muted)]">Containers, reverse proxy,
           firewall rules, self-hosted server.</div>
       </div>
     </div>
@@ -252,59 +252,59 @@
 
   <!-- Server -->
   <div class="tab-content-panel" [class.active]="active() === 'server'">
-    <div class="bg-noir-900 border border-noir-700 rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden">
-      <div class="flex flex-wrap items-center justify-between gap-4 mb-8 pb-6 border-b border-noir-800">
+    <div class="bg-[var(--bg-surface)] border border-[var(--border)] rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-8 pb-6 border-b border-[var(--border-inset)]">
         <div>
           <div
             class="flex items-center space-x-2 text-cyber-neon font-mono text-xs font-bold uppercase tracking-wider">
             <span class="w-2 h-2 rounded-full bg-cyber-neon animate-pulse"></span><span>MY OWN CLOUD SERVER</span>
           </div>
-          <h3 class="text-2xl sm:text-3xl font-tech font-bold text-sand-50 uppercase tracking-tight mt-1">Oracle
+          <h3 class="text-2xl sm:text-3xl font-tech font-bold text-[var(--text-primary)] uppercase tracking-tight mt-1">Oracle
             Cloud Instance // Morocco West (Casablanca)</h3>
         </div>
-        <div class="font-mono text-xs bg-noir-950 px-3 py-1.5 rounded-lg border border-noir-800 text-sand-300">HOST:
+        <div class="font-mono text-xs bg-[var(--bg-inset)] px-3 py-1.5 rounded-lg border border-[var(--border-inset)] text-[var(--text-tertiary)]">HOST:
           <span class="text-cyber-orange font-bold">rachidserraf.com</span></div>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 font-mono text-xs">
-        <div class="bg-noir-950/70 p-5 rounded-2xl border border-noir-800 flex flex-col justify-between">
+        <div class="bg-[var(--bg-inset)]/70 p-5 rounded-2xl border border-[var(--border-inset)] flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between mb-4"><span
                 class="text-[10px] text-cyber-orange uppercase font-bold tracking-widest">01 / COMPUTE</span><span
-                class="px-2 py-0.5 rounded bg-noir-800 text-sand-300 text-[10px]">UBUNTU</span></div>
-            <h4 class="font-tech text-lg text-sand-50 uppercase mb-2">Cloud Instance</h4>
-            <p class="text-sand-400 text-[11px] leading-relaxed">Ubuntu instance on Oracle Cloud Infrastructure
+                class="px-2 py-0.5 rounded bg-[var(--bg-raised)] text-[var(--text-tertiary)] text-[10px]">UBUNTU</span></div>
+            <h4 class="font-tech text-lg text-[var(--text-primary)] uppercase mb-2">Cloud Instance</h4>
+            <p class="text-[var(--text-muted)] text-[11px] leading-relaxed">Ubuntu instance on Oracle Cloud Infrastructure
               (Morocco West), set up and configured from the terminal.</p>
           </div>
           <div
-            class="mt-6 pt-3 border-t border-noir-800/80 flex items-center justify-between text-[11px] text-sand-300">
+            class="mt-6 pt-3 border-t border-[var(--border-inset)]/80 flex items-center justify-between text-[11px] text-[var(--text-tertiary)]">
             <span>REGION: MOROCCO WEST</span><span class="text-cyber-neon font-bold">SELF-MANAGED</span></div>
         </div>
-        <div class="bg-noir-950/70 p-5 rounded-2xl border border-noir-800 flex flex-col justify-between">
+        <div class="bg-[var(--bg-inset)]/70 p-5 rounded-2xl border border-[var(--border-inset)] flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between mb-4"><span
                 class="text-[10px] text-cyber-sage uppercase font-bold tracking-widest">02 / NETWORKING</span><span
-                class="px-2 py-0.5 rounded bg-noir-800 text-sand-300 text-[10px]">IPTABLES</span></div>
-            <h4 class="font-tech text-lg text-sand-50 uppercase mb-2">Docker Nginx</h4>
-            <p class="text-sand-400 text-[11px] leading-relaxed">Nginx running in Docker and exposed to the
+                class="px-2 py-0.5 rounded bg-[var(--bg-raised)] text-[var(--text-tertiary)] text-[10px]">IPTABLES</span></div>
+            <h4 class="font-tech text-lg text-[var(--text-primary)] uppercase mb-2">Docker Nginx</h4>
+            <p class="text-[var(--text-muted)] text-[11px] leading-relaxed">Nginx running in Docker and exposed to the
               internet, with hand-configured Security List rules and iptables.</p>
           </div>
           <div
-            class="mt-6 pt-3 border-t border-noir-800/80 flex items-center justify-between text-[11px] text-sand-300">
+            class="mt-6 pt-3 border-t border-[var(--border-inset)]/80 flex items-center justify-between text-[11px] text-[var(--text-tertiary)]">
             <span>NGINX IN DOCKER</span><span class="text-cyber-orange font-bold">SECURITY LIST</span></div>
         </div>
-        <div class="bg-noir-950/70 p-5 rounded-2xl border border-noir-800 flex flex-col justify-between">
+        <div class="bg-[var(--bg-inset)]/70 p-5 rounded-2xl border border-[var(--border-inset)] flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between mb-4"><span
                 class="text-[10px] text-cyber-coral uppercase font-bold tracking-widest">03 / DOMAIN</span><span
-                class="px-2 py-0.5 rounded bg-noir-800 text-sand-300 text-[10px]">CLOUDFLARE</span></div>
-            <h4 class="font-tech text-lg text-sand-50 uppercase mb-2">Domain &amp; DNS</h4>
-            <p class="text-sand-400 text-[11px] leading-relaxed">Domain <code
+                class="px-2 py-0.5 rounded bg-[var(--bg-raised)] text-[var(--text-tertiary)] text-[10px]">CLOUDFLARE</span></div>
+            <h4 class="font-tech text-lg text-[var(--text-primary)] uppercase mb-2">Domain &amp; DNS</h4>
+            <p class="text-[var(--text-muted)] text-[11px] leading-relaxed">Domain <code
                 class="text-cyber-orange">rachidserraf.com</code> managed on Cloudflare and pointed to the instance.
             </p>
           </div>
           <div
-            class="mt-6 pt-3 border-t border-noir-800/80 flex items-center justify-between text-[11px] text-sand-300">
-            <span>DNS MANAGED BY</span><span class="text-sand-100 font-bold">CLOUDFLARE</span></div>
+            class="mt-6 pt-3 border-t border-[var(--border-inset)]/80 flex items-center justify-between text-[11px] text-[var(--text-tertiary)]">
+            <span>DNS MANAGED BY</span><span class="text-[var(--text-body)] font-bold">CLOUDFLARE</span></div>
         </div>
       </div>
     </div>

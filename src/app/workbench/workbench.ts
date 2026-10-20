@@ -11,7 +11,7 @@ export type WorkbenchTab = 'projects' | 'stack' | 'server';
 export class Workbench {
   readonly tabOn = 'px-4 py-2 rounded-xl bg-cyber-orange text-noir-950 font-bold transition';
   readonly tabOff =
-    'px-4 py-2 rounded-xl text-sand-300 hover:text-sand-50 hover:bg-noir-800 transition';
+    'px-4 py-2 rounded-xl text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-raised)] transition';
 
   readonly active = signal<WorkbenchTab>('projects');
 

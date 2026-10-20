@@ -6,6 +6,12 @@ interface MousePoint {
   radius: number;
 }
 
+const cssVar = (name: string): string => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+let orangeRgba = '';
+let ochreRgba = '';
+let orangeRgb = '';
+
 class MeshParticle {
   x = 0;
   y = 0;
@@ -20,7 +26,7 @@ class MeshParticle {
     this.vx = (Math.random() - 0.5) * 0.6;
     this.vy = (Math.random() - 0.5) * 0.6;
     this.size = Math.random() * 2 + 1;
-    this.color = Math.random() > 0.4 ? 'rgba(255,122,48,.6)' : 'rgba(224,161,94,.4)';
+    this.color = Math.random() > 0.4 ? orangeRgba : ochreRgba;
   }
 
   update(mouse: MousePoint, width: number, height: number): void {
@@ -68,6 +74,10 @@ export class ParticleField implements AfterViewInit {
     const ctx = canvas?.getContext('2d');
     if (!canvas || !ctx) return;
 
+    orangeRgba = `rgba(${cssVar('--color-cyber-orange-rgb')},.6)`;
+    ochreRgba = `rgba(${cssVar('--color-cyber-ochre-rgb')},.4)`;
+    orangeRgb = cssVar('--color-cyber-orange-rgb');
+
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const abort = new AbortController();
     let frame = 0;
@@ -88,7 +98,7 @@ export class ParticleField implements AfterViewInit {
         for (let j = i + 1; j < particles.length; j++) {
           const d = Math.hypot(particles[i].x - particles[j].x, particles[i].y - particles[j].y);
           if (d < 110) {
-            ctx.strokeStyle = `rgba(255,122,48,${0.15 * (1 - d / 110)})`;
+            ctx.strokeStyle = `rgba(${orangeRgb},${0.15 * (1 - d / 110)})`;
             ctx.lineWidth = 0.8;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
