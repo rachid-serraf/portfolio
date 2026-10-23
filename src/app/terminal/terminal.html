@@ -14,8 +14,7 @@
     <div class="flex items-center space-x-2 font-mono text-xs" data-purpose="terminal-controls">
       <span class="text-[var(--text-muted)] text-[11px] hidden sm:inline">SELECT QUERY:</span>
       @for (command of commands; track command.key) {
-        <button [class]="active() === command.key ? tabOn : tabOff" (click)="select(command.key)">{{ command.label
-          }}</button>
+        <button [class]="active() === command.key ? tabOn : tabOff" (click)="select(command.key)">{{ command.label }}</button>
       }
     </div>
   </div>

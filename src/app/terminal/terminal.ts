@@ -14,7 +14,7 @@ const COMMANDS: CliCommand[] = [
     label: 'whoami',
     cmd: 'whoami',
     text: 'Full-stack developer who likes computer science and building real-world solutions. Thriving in collaborative teams, algorithmic challenges, and autonomous system architecture.',
-    tags: ['Zone01 Oujda (Peer-to-Peer Engineering)', 'HPS Casablanca (Acquirer Team Intern)', 'Morocco (GMT+1)'],
+    tags: ['Zone01 Oujda (Peer-to-Peer Engineering)', 'HPS Casablanca (Acquirer Team Intern)'],
   },
   {
     key: 'work',
@@ -48,7 +48,7 @@ const COMMANDS: CliCommand[] = [
 export class Terminal implements OnInit {
   readonly commands = COMMANDS;
   readonly tabOn =
-    'cmd-tab px-3 py-1 rounded cli-accent-bg text-noir-950 font-bold transition active-progress';
+    'cmd-tab px-3 py-1 rounded cli-accent-bg text-noir-950 font-bold';
   readonly tabOff =
     'cmd-tab px-3 py-1 rounded bg-[var(--bg-raised)] hover:bg-[var(--bg-raised-2)] text-[var(--text-secondary)] border border-[var(--border)] transition';
 
@@ -57,30 +57,24 @@ export class Terminal implements OnInit {
   readonly textDisplay = signal(COMMANDS[0].text);
   readonly tags = signal<string[]>(COMMANDS[0].tags);
 
-  private index = 0;
   private typeToken = 0;
   private typeTimer?: ReturnType<typeof setTimeout>;
-  private cycleTimer?: ReturnType<typeof setInterval>;
   private readonly reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   private readonly destroyRef = inject(DestroyRef);
 
   constructor() {
     this.destroyRef.onDestroy(() => {
       clearTimeout(this.typeTimer);
-      clearInterval(this.cycleTimer);
     });
   }
 
   ngOnInit(): void {
-    this.startAutoCycle();
   }
 
   select(key: string): void {
     const idx = COMMANDS.findIndex((c) => c.key === key);
     if (idx < 0) return;
-    this.index = idx;
     this.display(idx, true);
-    this.startAutoCycle();
   }
 
   private display(idx: number, animate: boolean): void {
@@ -99,17 +93,8 @@ export class Terminal implements OnInit {
     const step = (): void => {
       if (token !== this.typeToken) return;
       this.textDisplay.set(command.text.slice(0, ++i));
-      if (i < command.text.length) this.typeTimer = setTimeout(step, 14);
+      if (i < command.text.length) this.typeTimer = setTimeout(step, 24);
     };
     step();
-  }
-
-  private startAutoCycle(): void {
-    clearInterval(this.cycleTimer);
-    if (this.reduce) return;
-    this.cycleTimer = setInterval(() => {
-      this.index = (this.index + 1) % COMMANDS.length;
-      this.display(this.index, true);
-    }, 6000);
   }
 }
