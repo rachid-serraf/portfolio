@@ -12,11 +12,9 @@ interface Milestone {
 interface TrackDef {
   id: TrackId;
   label: string;
-  color: string; // full Tailwind class so the scanner picks it up
+  color: string; 
 }
 
-// ✏️ EDIT THIS LIST. Add a line every time you ship or learn something.
-// The chart redraws itself and the timeline always ends at "today".
 const START = '2024-04';
 
 const MILESTONES: Milestone[] = [
@@ -56,12 +54,11 @@ const MILESTONES: Milestone[] = [
 const LEARNING = ['Angular signals and SSR', 'Kafka event flows', 'CI/CD pipelines', 'Spring Boot microservices', 'Nginx and Cloudflare'];
 
 const TRACKS: TrackDef[] = [
-  { id: 'frontend', label: 'Frontend', color: 'text-cyber-orange' },
-  { id: 'backend', label: 'Backend', color: 'text-cyber-sage' },
+  { id: 'frontend', label: 'Frontend', color: 'text-cyber-sage' },
+  { id: 'backend', label: 'Backend', color: 'text-cyber-orange' },
   { id: 'devops', label: 'DevOps', color: 'text-cyber-cyan' },
 ];
 
-// Chart geometry (SVG viewBox units)
 const W = 1000;
 const H = 360;
 const PAD_L = 24;
@@ -113,7 +110,7 @@ export class Stream {
 
   readonly months = this.span;
   readonly count = MILESTONES.length;
-  readonly validated = 85; // projects + checkpoints validated at Zone01 Oujda
+  readonly validated = 85; 
   readonly baseY = H - PAD_B;
   readonly xNow = W - PAD_R;
 
@@ -169,7 +166,6 @@ export class Stream {
   }
 
   constructor() {
-    // afterNextRender only runs in the browser, so this is safe with prerendering.
     afterNextRender(() => {
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const io = new IntersectionObserver(
