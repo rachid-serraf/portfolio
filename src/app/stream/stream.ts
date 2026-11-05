@@ -1,136 +1,196 @@
-import { AfterViewInit, Component, DestroyRef, ElementRef, NgZone, ViewChild, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, afterNextRender, computed, inject, signal } from '@angular/core';
 
-type WaveLine = [rgb: string, speed: number, amplitude: number, frequency: number, phase: number, yOffset: number];
+type TrackId = 'frontend' | 'backend' | 'devops';
 
-const LINE_DEFS: [varName: string, speed: number, amplitude: number, frequency: number, phase: number, yOffset: number][] = [
-  ['--color-amber-rgb', 0.95, 46, 0.0048, 0, -12],
-  ['--color-cyber-sage-rgb', 1.25, 52, 0.0054, 0.75, -6],
-  ['--color-salmon-rgb', 1.1, 40, 0.0062, 1.45, 4],
-  ['--color-silver-rgb', 1.35, 58, 0.0051, 2.15, -8],
-  ['--color-amber-rgb', 1.45, 62, 0.0068, 2.9, 0],
-  ['--color-cyber-sage-rgb', 1.15, 48, 0.0058, 3.65, 8],
-  ['--color-salmon-rgb', 1.05, 44, 0.0064, 4.4, -4],
-  ['--color-silver-rgb', 0.85, 38, 0.0042, 5.15, 6],
-  ['--color-amber-rgb', 1.2, 50, 0.0046, 5.9, -2],
+interface Milestone {
+  track: TrackId;
+  date: string; // 'YYYY-MM'
+  title: string;
+  note: string;
+}
+
+interface TrackDef {
+  id: TrackId;
+  label: string;
+  color: string; // full Tailwind class so the scanner picks it up
+}
+
+// ✏️ EDIT THIS LIST. Add a line every time you ship or learn something.
+// The chart redraws itself and the timeline always ends at "today".
+const START = '2024-04';
+
+const MILESTONES: Milestone[] = [
+  // Backend
+  { track: 'backend', date: '2024-04', title: 'go-reloaded', note: 'First project at Zone01 Oujda: text tool in Go.' },
+  { track: 'backend', date: '2024-05', title: 'ascii-art-web', note: 'First web server and HTML templates in Go.' },
+  { track: 'backend', date: '2024-08', title: 'groupie-tracker', note: 'Consuming a REST API and showing the data.' },
+  { track: 'backend', date: '2024-09', title: 'lem-in', note: 'Pathfinding algorithms in Go.' },
+  { track: 'backend', date: '2024-12', title: 'forum', note: 'Full forum: auth, posts, sessions, SQLite.' },
+  { track: 'backend', date: '2025-03', title: 'social-network', note: 'Full-stack social network.' },
+  { track: 'backend', date: '2025-07', title: 'piscine-rust', note: 'A new language: Rust, ownership and safety.' },
+  { track: 'backend', date: '2025-09', title: 'piscine-java', note: 'Java foundations.' },
+  { track: 'backend', date: '2026-01', title: 'java-localserver', note: 'An HTTP server written from scratch in Java.' },
+  { track: 'backend', date: '2026-03', title: 'buy-01', note: 'E-commerce platform with Spring Boot.' },
+  { track: 'backend', date: '2026-08', title: 'HPS internship', note: 'Migrating PL/SQL stored procedures to Spring Boot microservices.' },
+  { track: 'backend', date: '2026-10', title: 'buy-02', note: 'Buy-01 plus cart, orders, search and a CI pipeline.' },
+  // Frontend
+  { track: 'frontend', date: '2025-01', title: 'make-your-game', note: 'Browser game in plain JavaScript, 60 fps.' },
+  { track: 'frontend', date: '2025-02', title: 'real-time-forum', note: 'WebSockets and a single-page app.' },
+  { track: 'frontend', date: '2025-03', title: 'social-network', note: 'Full-stack social network.' },
+  { track: 'frontend', date: '2025-04', title: 'mini-framework', note: 'Built my own JavaScript framework.' },
+  { track: 'frontend', date: '2025-05', title: 'bomberman-dom', note: 'Multiplayer game on top of my own framework.' },
+  { track: 'frontend', date: '2026-02', title: 'angul-it', note: 'First Angular project.' },
+  { track: 'frontend', date: '2026-03', title: 'buy-01', note: 'E-commerce platform with Spring Boot.' },
+  { track: 'frontend', date: '2026-10', title: 'buy-02', note: 'Buy-01 plus cart, orders, search and a CI pipeline.' },
+  { track: 'frontend', date: '2026-11', title: 'Portfolio in Angular', note: 'Rebuilt this site as an Angular app.' },
+  // DevOps
+  { track: 'devops', date: '2024-07', title: 'dockerize', note: 'First containers.' },
+  { track: 'devops', date: '2025-08', title: 'linux', note: 'Linux administration.' },
+  { track: 'devops', date: '2025-10', title: 'add-vm', note: 'Set up and managed virtual machines.' },
+  { track: 'devops', date: '2025-11', title: 'scan', note: 'Network scanning and security basics.' },
+  { track: 'devops', date: '2026-8', title: 'Own server + HTTPS', note: 'Oracle Cloud, nginx, Docker, Cloudflare domain.' },
+  { track: 'devops', date: '2026-9', title: 'Jenkins', note: 'CI/CD pipeline and code unit test.' },
+  { track: 'devops', date: '2026-10', title: 'SonarQube', note: 'Add code quality checks to pipeline.' },
 ];
 
-const DUST_VARS = ['--color-amber', '--color-cyber-sage', '--color-salmon', '--color-silver', '--color-amber', '--color-cyber-sage'];
+const LEARNING = ['Angular signals and SSR', 'Kafka event flows', 'CI/CD pipelines', 'Spring Boot microservices', 'Nginx and Cloudflare'];
 
-const cssVar = (name: string): string => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const TRACKS: TrackDef[] = [
+  { id: 'frontend', label: 'Frontend', color: 'text-cyber-orange' },
+  { id: 'backend', label: 'Backend', color: 'text-cyber-sage' },
+  { id: 'devops', label: 'DevOps', color: 'text-cyber-cyan' },
+];
+
+// Chart geometry (SVG viewBox units)
+const W = 1000;
+const H = 360;
+const PAD_L = 24;
+const PAD_R = 72;
+const PAD_B = 40;
+
+const monthIndex = (d: string): number => {
+  const [y, m] = d.split('-').map(Number);
+  return y * 12 + (m - 1);
+};
+
+interface Node {
+  id: string;
+  track: TrackId;
+  color: string;
+  trackLabel: string;
+  date: string;
+  title: string;
+  note: string;
+  x: number;
+  y: number;
+  order: number;
+}
 
 @Component({
   selector: 'app-stream',
   imports: [],
   templateUrl: './stream.html',
   styleUrl: './stream.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Stream implements AfterViewInit {
-  @ViewChild('canvas', { static: true }) private canvasRef?: ElementRef<HTMLCanvasElement>;
-
-  private readonly zone = inject(NgZone);
+export class Stream {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly destroyRef = inject(DestroyRef);
 
-  ngAfterViewInit(): void {
-    const canvas = this.canvasRef?.nativeElement;
-    const ctx = canvas?.getContext('2d');
-    const box = canvas?.parentElement;
-    if (!canvas || !ctx || !box) return;
+  readonly W = W;
+  readonly H = H;
+  readonly legend = TRACKS;
+  readonly shown = signal(false);
+  readonly learningIdx = signal(0);
+  readonly learning = computed(() => LEARNING[this.learningIdx()]);
 
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const abort = new AbortController();
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const lines: WaveLine[] = LINE_DEFS.map(([v, ...rest]) => [cssVar(v), ...rest]);
-    const dust = DUST_VARS.map(cssVar);
-    let w = 0;
-    let h = 0;
-    let sc = 1;
-    let t = 0;
-    let visible = true;
-    let frame = 0;
-    let observer: IntersectionObserver | undefined;
-    const m = { x: 0, y: 0, tx: 0, ty: 0, on: false, s: 0 };
+  private readonly startIdx = monthIndex(START);
+  private readonly nowIdx = (() => {
+    const n = new Date();
+    return n.getFullYear() * 12 + n.getMonth();
+  })();
+  private readonly span = Math.max(1, this.nowIdx - this.startIdx);
 
-    const resize = (): void => {
-      const r = box.getBoundingClientRect();
-      w = r.width;
-      h = r.height;
-      sc = Math.min(1, h / 380);
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      m.x = m.tx = w / 2;
-      m.y = m.ty = h / 2;
-    };
+  readonly months = this.span;
+  readonly count = MILESTONES.length;
+  readonly validated = 85; // projects + checkpoints validated at Zone01 Oujda
+  readonly baseY = H - PAD_B;
+  readonly xNow = W - PAD_R;
 
-    const draw = (): void => {
-      if (visible) {
-        t += 0.02;
-        m.x += (m.tx - m.x) * 0.08;
-        m.y += (m.ty - m.y) * 0.08;
-        m.s += ((m.on ? 1 : 0) - m.s) * 0.06;
-        ctx.clearRect(0, 0, w, h);
-        lines.forEach(([rgb, speed, amp, fr, ph, yo]) => {
-          const cy = h / 2 + yo * sc;
-          ctx.beginPath();
-          ctx.moveTo(0, cy);
-          for (let x = 0; x <= w; x += 6) {
-            let y = Math.sin(x * fr + t * speed + ph) * amp * sc;
-            y += Math.cos(x * fr * 2.1 - t * 0.75 + ph * 0.5) * amp * sc * 0.32;
-            y += Math.sin(x * 0.015 + t * 1.5) * 4 * sc;
-            const d = Math.hypot(x - m.x, cy + y - m.y);
-            if (d < 220) y -= Math.sin(d * 0.028) * (220 - d) * 0.28 * m.s;
-            ctx.lineTo(x, cy + y);
+  private readonly step = (H - PAD_B - 24) / Math.max(...TRACKS.map((t) => MILESTONES.filter((m) => m.track === t.id).length));
+
+  private x(idx: number): number {
+    return PAD_L + ((idx - this.startIdx) / this.span) * (W - PAD_L - PAD_R);
+  }
+
+  private y(level: number): number {
+    return this.baseY - level * this.step;
+  }
+
+  readonly tracks = TRACKS.map((t) => {
+    const ms = MILESTONES.filter((m) => m.track === t.id).sort((a, b) => monthIndex(a.date) - monthIndex(b.date));
+    const nodes: Node[] = ms.map((m, i) => ({
+      id: `${t.id}-${i}`,
+      track: t.id,
+      color: t.color,
+      trackLabel: t.label,
+      date: m.date,
+      title: m.title,
+      note: m.note,
+      x: this.x(monthIndex(m.date)),
+      y: this.y(i + 1),
+      order: monthIndex(m.date),
+    }));
+    const pts = [{ x: this.x(this.startIdx), y: this.y(0) }, ...nodes, { x: this.xNow, y: nodes.length ? nodes[nodes.length - 1].y : this.y(0) }];
+    let path = `M ${pts[0].x} ${pts[0].y}`;
+    for (let i = 1; i < pts.length; i++) {
+      const a = pts[i - 1];
+      const b = pts[i];
+      const mx = (a.x + b.x) / 2;
+      path += ` C ${mx} ${a.y}, ${mx} ${b.y}, ${b.x} ${b.y}`;
+    }
+    return { ...t, nodes, path, endY: pts[pts.length - 1].y };
+  });
+
+  readonly allNodes = this.tracks.flatMap((t) => t.nodes).sort((a, b) => a.order - b.order);
+
+  readonly ticks = (() => {
+    const out: { x: number; label: string }[] = [];
+    const startYear = Math.floor(this.startIdx / 12);
+    const nowYear = Math.floor(this.nowIdx / 12);
+    for (let yr = startYear + 1; yr <= nowYear; yr++) out.push({ x: this.x(yr * 12), label: String(yr) });
+    return out;
+  })();
+
+  readonly selected = signal<Node | null>(this.allNodes[this.allNodes.length - 1] ?? null);
+
+  select(n: Node): void {
+    this.selected.set(n);
+  }
+
+  constructor() {
+    // afterNextRender only runs in the browser, so this is safe with prerendering.
+    afterNextRender(() => {
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const io = new IntersectionObserver(
+        ([e]) => {
+          if (e.isIntersecting) {
+            this.shown.set(true);
+            io.disconnect();
           }
-          ctx.strokeStyle = `rgba(${rgb},.88)`;
-          ctx.lineWidth = 0.9;
-          ctx.lineCap = 'round';
-          ctx.shadowBlur = 10;
-          ctx.shadowColor = `rgba(${rgb},.5)`;
-          ctx.globalAlpha = 1;
-          ctx.stroke();
-        });
-        for (let i = 0; i < 32; i++) {
-          const px = (i * 107 + t * 55) % w;
-          const py = h / 2 + Math.sin(px * 0.0055 + t * 0.9 + i) * 58 * sc;
-          ctx.beginPath();
-          ctx.arc(px, py, (i % 3) * 0.5 + 0.9, 0, 6.2832);
-          ctx.fillStyle = dust[i % 6];
-          ctx.shadowBlur = 8;
-          ctx.shadowColor = ctx.fillStyle;
-          ctx.globalAlpha = 0.65;
-          ctx.fill();
-        }
-        ctx.globalAlpha = 1;
-        ctx.shadowBlur = 0;
-      }
-      if (!reduce) frame = requestAnimationFrame(draw);
-    };
-
-    this.zone.runOutsideAngular(() => {
-      resize();
-      window.addEventListener('resize', resize, { signal: abort.signal });
-      box.addEventListener(
-        'mousemove',
-        (e: MouseEvent) => {
-          const r = canvas.getBoundingClientRect();
-          m.tx = e.clientX - r.left;
-          m.ty = e.clientY - r.top;
-          m.on = true;
         },
-        { signal: abort.signal },
+        { threshold: 0.25 },
       );
-      box.addEventListener('mouseleave', () => (m.on = false), { signal: abort.signal });
-      observer = new IntersectionObserver((entries) => {
-        visible = entries[0].isIntersecting;
-      });
-      observer.observe(box);
-      draw();
-    });
+      io.observe(this.host.nativeElement);
 
-    this.destroyRef.onDestroy(() => {
-      abort.abort();
-      observer?.disconnect();
-      cancelAnimationFrame(frame);
+      let timer: ReturnType<typeof setInterval> | undefined;
+      if (reduce) this.shown.set(true);
+      else timer = setInterval(() => this.learningIdx.update((i) => (i + 1) % LEARNING.length), 2600);
+
+      this.destroyRef.onDestroy(() => {
+        io.disconnect();
+        if (timer) clearInterval(timer);
+      });
     });
   }
 }

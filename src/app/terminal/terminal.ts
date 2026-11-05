@@ -21,7 +21,7 @@ const COMMANDS: CliCommand[] = [
     label: 'work',
     cmd: 'cat ~/projects.md | head -n 5',
     text: 'Pinned builds: Buy-01 (Java microservices + Angular), 0-shell (a Unix shell in Rust), 01Blog (Java), bomberman-dom (browser game), facebook-like (social network app).',
-    tags: ['20 Repositories Total', 'Microservices', 'Rust Shell', 'Browser Game'],
+    tags: ['+20 Repositories Total', 'Microservices', 'Rust Shell', 'Browser Game'],
   },
   {
     key: 'learn',

@@ -1,0 +1,33 @@
+:host { display: block; }
+
+.line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  filter: drop-shadow(0 0 4px currentColor);
+}
+.node { opacity: 0; cursor: pointer; outline: none; }
+.node:focus-visible circle:nth-last-child(1) { stroke-width: 4; }
+.head { opacity: 0; }
+.pulse { opacity: 0; transform-box: fill-box; transform-origin: center; }
+
+/* One orchestrated reveal: lines draw, nodes appear, the "today" head pulses. */
+.shown .line { animation: draw 2.2s ease-out forwards; }
+.shown .node { animation: appear .4s ease-out forwards; animation-delay: calc(0.7s + var(--i) * 0.15s); }
+.shown .head { animation: appear .4s ease-out 2s forwards; }
+.shown .pulse { animation: pulse 2.4s ease-out 2.2s infinite; }
+
+.caret { animation: blink 1s steps(1) infinite; }
+
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes appear { to { opacity: 1; } }
+@keyframes pulse {
+  0% { opacity: .8; transform: scale(1); }
+  100% { opacity: 0; transform: scale(4); }
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .line { stroke-dashoffset: 0; animation: none !important; }
+  .node, .head { opacity: 1; animation: none !important; }
+  .pulse, .caret { animation: none !important; }
+}

@@ -1,36 +1,71 @@
-<!-- Wave stream -->
-<section class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" data-purpose="oscilloscope-stream" id="stream">
-  <div class="bg-[var(--bg-surface)]/90 border border-[var(--border)] rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-2xl">
+<!-- Growth log -->
+<section class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" id="stream">
+  <div class="bg-[var(--bg-surface)]/90 border border-[var(--border)] rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-2xl"
+    [class.shown]="shown()">
     <div class="flex flex-wrap items-center justify-between gap-4 mb-4 pb-4 border-b border-[var(--border-inset)]">
       <div>
-        <div
-          class="flex items-center space-x-2 text-cyber-orange font-mono text-xs font-bold uppercase tracking-widest">
-          <span>LIVE STREAM // FRONTEND → BACKEND → DEVOPS</span>
-        </div>
-        <h2 class="text-2xl sm:text-3xl font-tech font-bold text-[var(--text-primary)] uppercase tracking-tight mt-1">From the
-          browser to the server rack.</h2>
+        <div class="text-cyber-orange font-mono text-xs font-bold tracking-widest">GROWTH LOG // SINCE APR 2024</div>
+        <h2 class="text-2xl sm:text-3xl font-tech font-bold text-[var(--text-primary)] tracking-tight mt-1">
+          Every project adds a new line.
+        </h2>
       </div>
       <div class="flex items-center space-x-2 text-xs font-mono">
-        <span
-          class="px-2.5 py-1 rounded-full bg-cyber-orange/15 border border-cyber-orange/40 text-cyber-orange font-bold">FRONTEND</span>
-        <span
-          class="px-2.5 py-1 rounded-full bg-cyber-sage/15 border border-cyber-sage/40 text-cyber-sage font-bold">BACKEND</span>
-        <span
-          class="px-2.5 py-1 rounded-full bg-cyber-cyan/15 border border-cyber-cyan/40 text-cyber-cyan font-bold">DEVOPS</span>
+        <span class="px-2.5 py-1 rounded-full bg-cyber-orange/15 border border-cyber-orange/40 text-cyber-orange font-bold">FRONTEND</span>
+        <span class="px-2.5 py-1 rounded-full bg-cyber-sage/15 border border-cyber-sage/40 text-cyber-sage font-bold">BACKEND</span>
+        <span class="px-2.5 py-1 rounded-full bg-cyber-cyan/15 border border-cyber-cyan/40 text-cyber-cyan font-bold">DEVOPS</span>
       </div>
     </div>
-    <div
-      class="relative w-full h-48 sm:h-64 rounded-2xl overflow-hidden bg-[var(--bg-inset)] border border-[var(--border-inset)] cursor-crosshair">
-      <canvas #canvas class="w-full h-full block" aria-hidden="true"></canvas>
-      <div
-        class="absolute bottom-3 left-4 font-mono text-[10px] text-[var(--text-muted)] pointer-events-none flex items-center space-x-4">
-        <span>FREQ: <strong class="text-[var(--text-body)]">60.00 Hz</strong></span>
-        <span class="hidden sm:inline">MODULATION: <strong class="text-cyber-orange">HARMONIC</strong></span>
-        <span class="hidden sm:inline">INTERACTIVE: <strong class="text-cyber-neon">MOUSE HOVER
-            ACTIVE</strong></span>
+
+    <div class="rounded-2xl bg-[var(--bg-inset)] border border-[var(--border-inset)] overflow-x-auto">
+      <svg class="block w-full h-auto min-w-[640px]" [attr.viewBox]="'0 0 ' + W + ' ' + H" role="img"
+        aria-label="Chart of my skills growing over time, with one point per project or milestone">
+        <!-- year gridlines -->
+        @for (t of ticks; track t.label) {
+          <line [attr.x1]="t.x" [attr.x2]="t.x" y1="16" [attr.y2]="baseY" stroke="currentColor" class="text-[var(--border-inset)]"
+            stroke-dasharray="3 5" />
+          <text [attr.x]="t.x + 6" [attr.y]="baseY + 24" class="fill-[var(--text-muted)] font-mono" font-size="12">{{ t.label }}</text>
+        }
+        <line x1="0" [attr.x2]="W" [attr.y1]="baseY" [attr.y2]="baseY" stroke="currentColor" class="text-[var(--border-inset)]" />
+        <text x="24" [attr.y]="baseY + 24" class="fill-[var(--text-muted)] font-mono" font-size="12">Apr 2024</text>
+        <text [attr.x]="xNow" [attr.y]="baseY + 24" text-anchor="middle" class="fill-[var(--text-primary)] font-mono" font-size="12">today</text>
+
+        <!-- one growing line per track -->
+        @for (t of tracks; track t.id) {
+          <g [class]="t.color">
+            <path class="line" [attr.d]="t.path" pathLength="1" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" />
+            <circle class="head" [attr.cx]="xNow" [attr.cy]="t.endY" r="4" fill="currentColor" />
+            <circle class="pulse" [attr.cx]="xNow" [attr.cy]="t.endY" r="4" fill="none" stroke="currentColor" />
+            <text [attr.x]="xNow + 12" [attr.y]="t.endY + 4" fill="currentColor" font-size="12" class="font-mono">{{ t.label }}</text>
+          </g>
+        }
+
+        <!-- milestone nodes -->
+        @for (n of allNodes; track n.id; let i = $index) {
+          <g [class]="n.color + ' node'" [style.--i]="i" role="button" tabindex="0" [attr.aria-label]="n.title + ', ' + n.date"
+            (click)="select(n)" (mouseenter)="select(n)" (focus)="select(n)" (keydown.enter)="select(n)">
+            <circle [attr.cx]="n.x" [attr.cy]="n.y" r="16" fill="transparent" />
+            @if (selected()?.id === n.id) {
+              <circle [attr.cx]="n.x" [attr.cy]="n.y" r="11" fill="none" stroke="currentColor" stroke-width="1.5" />
+            }
+            <circle [attr.cx]="n.x" [attr.cy]="n.y" r="5.5" fill="var(--bg-inset)" stroke="currentColor" stroke-width="2.5" />
+          </g>
+        }
+      </svg>
+    </div>
+
+    <div class="mt-4 grid gap-4 sm:grid-cols-[1fr_auto] items-start">
+      <div class="min-h-[4.5rem]" aria-live="polite">
+        @if (selected(); as s) {
+          <div class="font-mono text-xs text-[var(--text-muted)]">{{ s.date }} &middot; <span [class]="s.color">{{ s.trackLabel }}</span></div>
+          <div class="text-lg font-tech font-bold text-[var(--text-primary)]">{{ s.title }}</div>
+          <p class="text-sm text-[var(--text-body)]">{{ s.note }}</p>
+        }
       </div>
-      <div class="absolute top-3 right-4 font-mono text-[10px] text-[var(--text-muted)] pointer-events-none">STREAM_SYNC: <span
-          class="text-cyber-neon font-bold">LOCKED</span></div>
+      <div class="font-mono text-xs text-[var(--text-muted)] sm:text-right">
+        <div>{{ months }} months &middot; {{ validated }} validations &middot; {{ count }} milestones shown</div>
+        <div class="mt-1">Learning now: <strong class="text-cyber-neon">{{ learning() }}</strong><span class="caret">_</span></div>
+      </div>
     </div>
   </div>
 </section>
